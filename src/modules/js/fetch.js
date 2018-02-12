@@ -1,6 +1,4 @@
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-Vue.use(VueResource)
+import axios from 'axios'
 
 var host = "http://rap.taobao.org/mockjsdata/11037"
 
@@ -15,11 +13,7 @@ function rap(urlList) {
 
 function fetch(url, data = null) {
   return new Promise((resolve, reject) => {
-    Vue.http({
-      url,
-      method: 'post',
-      params: data
-    }).then(function(response) {
+    axios.post(url,data).then(function(response) {
         let result = response.data
         if (typeof(result) === "string") {
           result = JSON.parse(result)
