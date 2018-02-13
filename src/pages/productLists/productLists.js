@@ -13,6 +13,9 @@ import Foot from 'components/foot/foot.vue'
 import utils from 'modules/js/utils'
 import {fetch,rap} from 'modules/js/fetch'
 
+import Logstate from 'components/logstate/logstate.vue'
+import Minicart from 'components/minicart/minicart.vue'
+
 let url = {
   classify: '/lists/classify.do',
   lists: '/lists/lists.do',
@@ -96,6 +99,8 @@ new Vue({
   components: {
     Top,
     Foot,
-    Search
+    Search,
+    Logstate,
+    Minicart
   }
 })
