@@ -1,5 +1,4 @@
 class Utils {
-
   /**
    * 添加url的query参数
    * @param {string} url url地址
@@ -8,12 +7,12 @@ class Utils {
    * todo：data的value为数组情况的处理
    */
   static setQuery(url, data) {
-    let str = ''
+    let str = "";
     Object.keys(data).forEach(key => {
-      str += `&${key}=${data[key]}`
-    })
-    let mark = url.indexOf('?') == -1 ? '?' : '&'
-    return url + mark + str.substr(1)
+      str += `&${key}=${data[key]}`;
+    });
+    let mark = url.indexOf("?") == -1 ? "?" : "&";
+    return url + mark + str.substr(1);
   }
 
   /**
@@ -22,8 +21,8 @@ class Utils {
    * @return {string|Object} 传递key则返回对应k的value，默认返回所以query转化的object
    */
   static getQuery(key = undefined) {
-    let arr = location.search.substr(1).split('&')
-    return this.arrToObj(key,arr)
+    let arr = location.search.substr(1).split("&");
+    return this.arrToObj(key, arr);
   }
 
   /*
@@ -32,19 +31,18 @@ class Utils {
    * @return {string} cookie的value，如果不传cookie的name则返回包含所有name和value的对象
    */
   static getCookie(cname) {
-    let arr = document.cookie.split(';')
-    return this.arrToObj(cname,arr)
+    let arr = document.cookie.split(";");
+    return this.arrToObj(cname, arr);
   }
 
-
-  static arrToObj(key,arr) {
-    let data = {}
-    arr.forEach((item) => {
-      let cur = item.split('=')
-      data[cur[0].trim()] = cur[1].trim()
-    })
-    return key ? data[key] : data
+  static arrToObj(key, arr) {
+    let data = {};
+    arr.forEach(item => {
+      let cur = item.split("=");
+      data[cur[0].trim()] = cur[1].trim();
+    });
+    return key ? data[key] : data;
   }
 }
 
-export default Utils
+export default Utils;

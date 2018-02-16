@@ -16,7 +16,7 @@
         <!--个人中心-->
         <Logstate></Logstate>
         <!--购物车中心-->
-        <Minicart></Minicart>
+        <Minicart :state="state"></Minicart>
       </section>
       <!--left  列表-->
       <div class="left-content mt13">
@@ -61,7 +61,7 @@
             <ul class="products-lists mt13">
               <!--租、售-->
               <li v-for ='(list,index) in macList' v-if="state<3">
-                <a href="detail.html"><img :src="list.image"></a>
+                <a :href="'detail.html?id='+list.unifiedMerchandiseId+'&state='+state"><img :src="list.image"></a>
                 <div class="products-lists-item">
                   <h4>{{list.name}}</h4>
                   <span>{{list.desc}}</span>
@@ -79,11 +79,11 @@
                     <dd><i>{{list.discount}}</i>元</dd>
                   </dl>
                 </div>
-                <button>加入购物车</button>
+                <button @click="addToCart(list)">加入购物车</button>
               </li>
               <!--配件-->
               <li v-if="state===3" v-for="(list,index) in macList">
-                <a href="detail.html"><img :src="list.image"></a>
+                <a :href="'detail.html?id='+list.unifiedMerchandiseId+'&state='+state"><img :src="list.image"></a>
                 <div class="products-lists-item">
                   <h4>{{list.name}}</h4>
                   <div class="adaptation-situation">
@@ -95,10 +95,11 @@
                     <dd><i>{{list.discount}}</i>元</dd>
                   </dl>
                 </div>
-                <button>加入购物车</button>
+                <button @click="addToCart(list)">加入购物车</button>
               </li>
             </ul>
           </div>
+          <Pagination :total="50" :display="5" :page-size="pageSize" :page-num="pageNum" @change="change"></Pagination>
         </div>
       </div>
     </div>
