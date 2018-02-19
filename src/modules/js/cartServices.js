@@ -4,7 +4,8 @@ let url = {
   list: "/cart/list.do",
   add: "/cart/add.do",
   reduce: "/cart/reduce.do",
-  remove: "/cart/remove.do"
+  remove: "/cart/remove.do",
+  update: '/cart/update.do'
 };
 url = rap(url);
 
@@ -20,6 +21,11 @@ class Cart {
   static reduce(data) {
     return fetch(url.reduce, data);
   }
+
+  static update(data) {
+    return fetch(url.update,data)
+  }
+
 }
 
 export { Cart };

@@ -44,6 +44,10 @@
     created(){
       bus.$on('getInfo',(user)=>{
         this.user = user
+        this.$router.push({
+          path:this.tabs[this.tabIndex].path,
+          query:{index:this.selectIndex+1}
+        })
       })
     },
     methods: {
@@ -53,7 +57,10 @@
       },
       changeSelect(index){
         this.selectIndex = index
-        this.$router.push(this.tabs[this.tabIndex].path)
+        this.$router.push({
+          path:this.tabs[this.tabIndex].path,
+          query:{index:index+1}
+        })
       }
     }
   }
