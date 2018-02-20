@@ -23,7 +23,7 @@
             <table>
                 <tr v-for="(item,index) in lists">
                     <td>
-                        <input type="checkbox" class="cart-checkbox" name="cart-checked">
+                        <input type="checkbox" v-model="item.isSelected" class="cart-checkbox" name="cart-checked" @change="toggle(item)">
                     </td>
                     <td>
                         <div class="cart-detail-img">
@@ -87,7 +87,7 @@
             <table>
                 <tr v-for="(item,index) in lists">
                     <td>
-                        <input type="checkbox" class="cart-checkbox" name="cart-checked" >
+                        <input type="checkbox" class="cart-checkbox" name="cart-checked" @change="toggle(item)" v-model="item.isSelected">
                     </td>
                     <td>
                         <div class="cart-detail-img">
@@ -126,12 +126,11 @@
                         })'></a>
                       </td>
                       <td class="fbtn-color">¥{{item.sum}}</td>
-
                 </tr>
             </table>
             <div class="cart-bottom">
                 <div class="float-l">
-                    <span><input type="checkbox" class="cart-checkbox" name="cart-checked" >全选</span>
+                    <span><input type="checkbox" class="cart-checkbox" name="cart-checked" @click="toggleAll" v-model="allSelected">全选</span>
                     <a href="javascript:;"  @click='remove()'><i class="icon-delete" ></i>删除</a>
                 </div>
                 <div class="float-r">
@@ -143,7 +142,7 @@
     </div>
   </template>
 
-  <pagination v-if='listsData&&lists.length' :total='total' :display='5' :page-size='pageSize' :page-num='pageNum' @change="changeNum"></pagination>
+  <!-- <pagination v-if='listsData&&lists.length' :total='total' :display='5' :page-size='pageSize' :page-num='pageNum' @change="changeNum"></pagination> -->
   </div>
 </template>
 

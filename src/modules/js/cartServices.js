@@ -26,6 +26,9 @@ class Cart {
     return fetch(url.update,data)
   }
 
+  static remove(data) {
+    return fetch(url.remove, data)
+  }
 }
 
 export { Cart };

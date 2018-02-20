@@ -8,18 +8,28 @@ export default {
       listsData: null,
       lists: [],
       allSelected: false,
-      sum: 0,
       total: 50,
       pageNum: 1,
-      pageSize: 6
+      pageSize: 6,
     };
   },
+  props:['queryIndex'],
   created() {
     this.getLists();
   },
   computed: {
     selectIndex() {
       return this.$route.query.index;
+    },
+    sum(){
+      let sum = 0
+      this.lists.forEach(item => {
+        if(item.isSelected){
+          console.log(item.sum)
+          sum += item.sum
+        }
+      });
+      return sum
     }
   },
   methods: {
@@ -134,16 +144,50 @@ export default {
           (this.selectIndex == 1 ? item.month : 1);
       });
     },
-    toggle(item) {},
-    checkAll() {},
-    toggleAll() {},
+    toggle(item) {
+      if(item.isSelected){
+        this.allSelected = this.checkAll()
+      }else{
+        this.allSelected = false
+      }
+    },
+    checkAll() {
+      return this.lists.every((item) => {
+        return item.isSelected
+      })
+    },
+    toggleAll() {
+      this.lists.forEach((item) => {
+        item.isSelected = !this.allSelected
+      })
+    },
     calsum() {},
-    remove() {},
+    remove() {
+      let ids = []
+      this.lists.forEach(item=>{
+        if(item.isSelected){
+          ids.push(item.unifiedMerchandiseId)
+        }
+      })
+      Cart.remove({
+        longList: ids.toString(),
+        type:this.selectIndex
+      }).then(res=>{
+        this.lists = this.lists.filter(item=>{
+          return !item.isSelected
+        })
+      })
+    },
     changeNum(page) {
       this.pageNum = page;
       this.getLists();
     },
     goApply() {}
+  },
+  watch:{
+    queryIndex(){
+      this.getLists();
+    }
   },
   components: {
     Pagination
