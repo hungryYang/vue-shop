@@ -1,6 +1,7 @@
 import { Cart } from "modules/js/cartServices.js";
 import Pagination from "components/pagination/pagination.vue";
-
+import { Order } from "modules/js/orderServices.js";
+import {Message} from "element-ui"
 export default {
   name: "cart",
   data() {
@@ -10,10 +11,10 @@ export default {
       allSelected: false,
       total: 50,
       pageNum: 1,
-      pageSize: 6,
+      pageSize: 6
     };
   },
-  props:['queryIndex'],
+  //props: ["queryIndex"],
   created() {
     this.getLists();
   },
@@ -21,15 +22,15 @@ export default {
     selectIndex() {
       return this.$route.query.index;
     },
-    sum(){
-      let sum = 0
+    sum() {
+      let sum = 0;
       this.lists.forEach(item => {
-        if(item.isSelected){
-          console.log(item.sum)
-          sum += item.sum
+        if (item.isSelected) {
+          console.log(item.sum);
+          sum += item.sum;
         }
       });
-      return sum
+      return sum;
     }
   },
   methods: {
@@ -81,19 +82,17 @@ export default {
 
         return;
       }
-      Cart
-        .update({
-          month: data.month,
-          number: data.number,
-          type: this.selectIndex,
-          unifiedMerchandiseId: item.unifiedMerchandiseId
-        })
-        .then(res => {
-          item.sum =
-            item.number *
-            item.discount *
-            (this.selectIndex == 1 ? item.month : 1);
-        });
+      Cart.update({
+        month: data.month,
+        number: data.number,
+        type: this.selectIndex,
+        unifiedMerchandiseId: item.unifiedMerchandiseId
+      }).then(res => {
+        item.sum =
+          item.number *
+          item.discount *
+          (this.selectIndex == 1 ? item.month : 1);
+      });
     },
     add(data) {
       let item = data.item;
@@ -145,50 +144,62 @@ export default {
       });
     },
     toggle(item) {
-      if(item.isSelected){
-        this.allSelected = this.checkAll()
-      }else{
-        this.allSelected = false
+      if (item.isSelected) {
+        this.allSelected = this.checkAll();
+      } else {
+        this.allSelected = false;
       }
     },
     checkAll() {
-      return this.lists.every((item) => {
-        return item.isSelected
-      })
+      return this.lists.every(item => {
+        return item.isSelected;
+      });
     },
     toggleAll() {
-      this.lists.forEach((item) => {
-        item.isSelected = !this.allSelected
-      })
+      this.lists.forEach(item => {
+        item.isSelected = !this.allSelected;
+      });
     },
     calsum() {},
     remove() {
-      let ids = []
-      this.lists.forEach(item=>{
-        if(item.isSelected){
-          ids.push(item.unifiedMerchandiseId)
+      let ids = [];
+      this.lists.forEach(item => {
+        if (item.isSelected) {
+          ids.push(item.unifiedMerchandiseId);
         }
-      })
+      });
       Cart.remove({
         longList: ids.toString(),
-        type:this.selectIndex
-      }).then(res=>{
-        this.lists = this.lists.filter(item=>{
-          return !item.isSelected
-        })
-      })
+        type: this.selectIndex
+      }).then(res => {
+        this.lists = this.lists.filter(item => {
+          return !item.isSelected;
+        });
+      });
     },
     changeNum(page) {
       this.pageNum = page;
       this.getLists();
     },
-    goApply() {}
-  },
-  watch:{
-    queryIndex(){
-      this.getLists();
+    goApply() {
+      let lists = this.lists.filter(item => {
+        return item.isSelected;
+      });
+      if (!lists.length) {
+        Message({
+          message: "请选择商品",
+          type: "warning"
+        });
+        return;
+      }
+      Order.toOrder(lists, this.selectIndex);
     }
   },
+  // watch: {
+  //   queryIndex() {
+  //     this.getLists();
+  //   }
+  // },
   components: {
     Pagination
   }

@@ -2,10 +2,12 @@ import "./minicart.scss";
 import { Message } from "element-ui";
 import { Cart } from "modules/js/cartServices";
 import bus from "modules/js/bus";
+import { Order } from "modules/js/orderServices";
 export default {
   props: ["state"],
   data() {
     return {
+      lists: "",
       saleData: "",
       rentData: "",
       partsData: "",
@@ -17,32 +19,31 @@ export default {
     this.getLists(2);
     this.getLists(3);
 
-    bus.$on('addToCart',(id)=>{
-      this.addNumber(id)
-    })
+    bus.$on("addToCart", id => {
+      this.addNumber(id);
+    });
   },
   methods: {
     addNumber(id) {
-      let productData
-      switch(this.state) {
+      let productData;
+      switch (this.state) {
         case 1:
-          productData = this.rentData
-          break
+          productData = this.rentData;
+          break;
         case 2:
-          productData = this.saleData
-          break
+          productData = this.saleData;
+          break;
         case 3:
-          productData = this.partsData
-          break
+          productData = this.partsData;
+          break;
       }
-      productData.list.forEach((item) => {
-        if(item.unifiedMerchandiseId == id) {
+      productData.list.forEach(item => {
+        if (item.unifiedMerchandiseId == id) {
           item.number++;
-          item.sum += item.discount
-          productData.sum += item.discount
+          item.sum += item.discount;
+          productData.sum += item.discount;
         }
-      })
-
+      });
     },
     add(para) {
       Cart.list({
@@ -87,12 +88,16 @@ export default {
         para.data.sum -= para.item.discount;
       });
     },
+    apply() {
+      Order.toOrder(this.lists, this.state);
+    },
     getLists(type) {
       Cart.list({
         pageNum: 1,
         pageSize: 4,
         type
       }).then(res => {
+        this.lists = res.data.list;
         switch (type) {
           case 1:
             this.rentData = res.data;

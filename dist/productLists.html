@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>挖掘机租赁列表</title>
+<link href="/static/css/productLists.d6f1c17c8b0b8d75647e8c308832c1d0.css" rel="stylesheet"></head>
+
+<body>
+  <div id="app" v-cloak>
+    <top></top>
+    <search></search>
+    <div class="main-content-w clearfix">
+      <!--right-->
+      <section>
+        <!--个人中心-->
+        <Logstate></Logstate>
+        <!--购物车中心-->
+        <Minicart :state="state"></Minicart>
+      </section>
+      <!--left  列表-->
+      <div class="left-content mt13">
+        <!--商品列表（租，售，配件，商品搜索）-->
+        <div class="cur-index">
+          当前位置：<a href="index.html">首页</a> > <i>{{positionMsg}}</i>
+        </div>
+        <!--搜索为空-->
+        <div class="search-empty" v-if="macList&&macList.length===0">
+          <i class="icon-no-data"></i>
+          <p>很抱歉，没有相关商品！</p>
+        </div>
+        <div>
+          <!--文章列表-->
+          <div v-if="keyword">
+            <ul class="article-lists mt13">
+              <li v-for="list in macList">
+                <i>1</i>
+                <p><a href="">{{list.name}}</a></p>
+                <span>{{list.dateStr}}</span>
+              </li>
+            </ul>
+          </div>
+          <div v-else>
+            <!--品牌选择-->
+            <div class="brand-sort mt13">
+              <dl>
+                <dt>品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;牌：</dt>
+                <dd v-for="(list,index) in classifyList">
+                  <a :class="{'cur':index==brandIndex}" href="javascript:;" @click="selectBrand(index)">{{list.name}}</a>
+                </dd>
+              </dl>
+              <dl>
+                <dt>类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型：</dt>
+                <dd>
+                  <a href="javascript:;" v-for="(list,index) in typeList" :class="{'cur':index==typeIndex}" @click="selectType(list,index)">
+              {{list.name}}</a>
+                </dd>
+              </dl>
+            </div>
+            <!--商品列表-->
+            <ul class="products-lists mt13">
+              <!--租、售-->
+              <li v-for ='(list,index) in macList' v-if="state<3">
+                <a :href="'detail.html?id='+list.unifiedMerchandiseId+'&state='+state"><img :src="list.image"></a>
+                <div class="products-lists-item">
+                  <h4>{{list.name}}</h4>
+                  <span>{{list.desc}}</span>
+                  <dl>
+                    <dt>载重：</dt>
+                    <dd>{{list.weight}}{{list.unit}}</dd>
+                  </dl>
+                  <dl v-if="state===1">
+                    <dt>租金：</dt>
+                    <dd><i>{{list.discount}}</i>元/辆/月</dd>
+                    <dd class="special">(3个月起租)</dd>
+                  </dl>
+                  <dl v-else>
+                    <dt>单价：</dt>
+                    <dd><i>{{list.discount}}</i>元</dd>
+                  </dl>
+                </div>
+                <button @click="addToCart(list)">加入购物车</button>
+              </li>
+              <!--配件-->
+              <li v-if="state===3" v-for="(list,index) in macList">
+                <a :href="'detail.html?id='+list.unifiedMerchandiseId+'&state='+state"><img :src="list.image"></a>
+                <div class="products-lists-item">
+                  <h4>{{list.name}}</h4>
+                  <div class="adaptation-situation">
+                    <h5>适配挖掘机</h5>
+                    <span>挖掘机品牌</span>
+                  </div>
+                  <dl>
+                    <dt>单价：</dt>
+                    <dd><i>{{list.discount}}</i>元</dd>
+                  </dl>
+                </div>
+                <button @click="addToCart(list)">加入购物车</button>
+              </li>
+            </ul>
+          </div>
+          <Pagination :total="50" :display="5" :page-size="pageSize" :page-num="pageNum" @change="change"></Pagination>
+        </div>
+      </div>
+    </div>
+    <foot></foot>
+  </div>
+<script type="text/javascript" src="/static/js/manifest.24521696aa72ce78af74.js"></script><script type="text/javascript" src="/static/js/vendor.36690e376a96f77e8c56.js"></script><script type="text/javascript" src="/static/js/productLists.d294cb8afcac390326a7.js"></script></body>
+
+</html>

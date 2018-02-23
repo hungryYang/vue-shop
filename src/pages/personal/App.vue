@@ -24,50 +24,74 @@
       <!--right-->
       <div class="mt13 right-content">
         <!-- 路由切换 -->
-       <router-view :query-index="queryIndex"></router-view>
+       <router-view></router-view>
       </div>
     </div>
 </template>
 
 <script>
-  import bus from 'modules/js/bus.js'
-  import tab from './tabConfig.js'
-  export default {
-    data() {
-      return {
-        user:null,
-        tabs:tab,
-        selectIndex:0,
-        tabIndex:0,
-        queryIndex:0
+import bus from "modules/js/bus.js";
+import tab from "./tabConfig.js";
+import Utils from "modules/js/utils.js";
+export default {
+  data() {
+    return {
+      user: null,
+      tabs: tab,
+      selectIndex: 0,
+      tabIndex: 0
+    };
+  },
+  created() {
+    bus.$on("getInfo", user => {
+      this.user = user;
+    });
+    bus.$on("login", user => {
+      this.user = user;
+    });
+
+    let pathData = location.href.split("#/")[1];
+    if (pathData) {
+      if (pathData.indexOf("?") > -1) {
+        let path = pathData.split("?");
+        this.tabIndex = this.tabs.findIndex(item => {
+          return item.path == path[0];
+        });
+        this.selectIndex = parseInt(path[1].split("=")[1]);
+      } else {
+        let path = pathData.split("/");
+        this.tabIndex = this.tabs.findIndex(item => {
+          return item.path == path[0];
+        });
+        this.selectIndex = this.tabs[this.tabIndex].children.findIndex(item => {
+          return item.path == path[1];
+        });
       }
+    }
+    this.delRouter(this.selectIndex);
+  },
+  methods: {
+    changeTab(index) {
+      this.tabIndex = index;
+      this.selectIndex = -1;
     },
-    created(){
-      bus.$on('getInfo',(user)=>{
-        this.user = user
-      })
-      bus.$on('login',(user)=>{
-        this.user = user
-      })
-      this.$router.push({
-        path:this.tabs[this.tabIndex].path,
-        query:{index:this.selectIndex+1}
-      })
+    changeSelect(index) {
+      this.selectIndex = index;
+      this.delRouter(index);
     },
-    methods: {
-      changeTab(index){
-        this.tabIndex = index
-        this.selectIndex = -1
-      },
-      changeSelect(index){
-        this.selectIndex = index
-        this.queryIndex = index+1
+    delRouter(index) {
+      let tab = this.tabs[this.tabIndex];
+      if (tab.children) {
         this.$router.push({
-          path:this.tabs[this.tabIndex].path,
-          query:{index:index+1}
-        })
-        //this.$router.go(this.$route.path)
+          path: `/${tab.path}/${tab.children[index].path}`
+        });
+      } else {
+        this.$router.push({
+          path: "/" + this.tabs[this.tabIndex].path,
+          query: { index: index }
+        });
       }
     }
   }
+};
 </script>

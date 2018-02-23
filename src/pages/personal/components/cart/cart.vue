@@ -152,7 +152,7 @@
 </script>
 
 <style lang="scss">
- @import "../../../modules/sass/variables.scss";
+ @import "../../../../modules/sass/variables.scss";
  /*购物车为空*/
 
  .cart-empty {
@@ -265,10 +265,10 @@
      width: 17px;
      height: 17px;
      z-index: 1;
-     background: url(./imgs/Icon-circle.png) no-repeat center;
+     background: url(../imgs/Icon-circle.png) no-repeat center;
    }
    input[name="cart-checked"]:checked {
-     background: url(./imgs/Icon-circle-dot.png) no-repeat center;
+     background: url(../imgs/Icon-circle-dot.png) no-repeat center;
    }
  }
 

@@ -1,5 +1,5 @@
 <template>
   <div>
-    租赁意向单
-  </div>
+    安全认正
+  </div>    
 </template>

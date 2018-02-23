@@ -1,5 +1,5 @@
 <template>
   <div>
-    个人设置
-  </div>
+    个人信息
+  </div>    
 </template>
