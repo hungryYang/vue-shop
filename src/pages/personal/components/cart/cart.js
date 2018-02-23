@@ -195,11 +195,11 @@ export default {
       Order.toOrder(lists, this.selectIndex);
     }
   },
-  // watch: {
-  //   queryIndex() {
-  //     this.getLists();
-  //   }
-  // },
+  watch: {
+    $route() {
+      this.getLists();
+    }
+  },
   components: {
     Pagination
   }
